@@ -1,0 +1,9 @@
+# Bytecode e saida de compilacao
+*.class
+out/
+bin/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
