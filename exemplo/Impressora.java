@@ -1,27 +1,48 @@
 package exemplo;
 
-// Receiver: contem a logica de negocio real.
-// No caso, uma impressora fisica que imprime documentos.
+import java.util.ArrayList;
+import java.util.List;
+
+// Receiver (Command): contem a logica de negocio real.
+// Subject (Observer): avisa os observadores sempre que algo acontece.
+// Repare que a impressora nao imprime nada na tela: quem decide como
+// mostrar (ou guardar) os eventos sao os observadores.
 
 public class Impressora {
     private final String nome;
     private boolean ligada;
     private int numeroImpressoes;
+    private final List<Observador> observadores;
 
     public Impressora(String nome) {
         this.nome = nome;
         this.ligada = false;
         this.numeroImpressoes = 0;
+        this.observadores = new ArrayList<>();
+    }
+
+    public void adicionarObservador(Observador observador) {
+        observadores.add(observador);
+    }
+
+    public void removerObservador(Observador observador) {
+        observadores.remove(observador);
+    }
+
+    private void notificarObservadores(String evento) {
+        for (Observador observador : observadores) {
+            observador.atualizar(evento);
+        }
     }
 
     public void ligar() {
         ligada = true;
-        System.out.println("Impressora " + nome + " ligada.");
+        notificarObservadores("Impressora " + nome + " ligada");
     }
 
     public void desligar() {
         ligada = false;
-        System.out.println("Impressora " + nome + " desligada.");
+        notificarObservadores("Impressora " + nome + " desligada");
     }
 
     public void imprimir(String documento) {
@@ -29,7 +50,7 @@ public class Impressora {
             ligar();
         }
         numeroImpressoes++;
-        System.out.println("Imprimindo: " + documento);
+        notificarObservadores("Impressao #" + numeroImpressoes + ": " + documento);
     }
 
     @Override

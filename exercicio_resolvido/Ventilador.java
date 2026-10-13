@@ -1,8 +1,9 @@
 package exercicio_resolvido;
 
-// Receiver: um ventilador com velocidades de 0 (desligado) a 3.
+// Receiver (Command) e Subject (Observer): um ventilador com velocidades
+// de 0 (desligado) a 3.
 
-public class Ventilador {
+public class Ventilador extends DispositivoObservavel {
     private final String comodo;
     private int velocidade;
 
@@ -13,7 +14,7 @@ public class Ventilador {
 
     public void setVelocidade(int velocidade) {
         this.velocidade = velocidade;
-        System.out.println("Ventilador da " + comodo + " na velocidade " + velocidade + ".");
+        notificarObservadores("Ventilador da " + comodo + " na velocidade " + velocidade + ".");
     }
 
     public int getVelocidade() {

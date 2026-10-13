@@ -3,7 +3,7 @@ package exercicio;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-// Invoker: um controle remoto com N botoes. Cada botao guarda um Comando.
+// Invoker (Command): um controle remoto com N botoes. Cada botao guarda um Comando.
 // O controle NAO SABE o que cada botao faz, so chama executar()/desfazer().
 // Ele tambem mantem um historico para o botao "desfazer".
 
@@ -31,17 +31,25 @@ public class ControleRemoto {
     }
 
     // ============================================================
-    // METODO MAIN (Client): teste do exercicio
+    // METODO MAIN (Client): teste do exercicio (Command + Observer)
     // Nao precisa alterar. Compare a saida com a do README.
     // ============================================================
     public static void main(String[] args) {
         System.out.println("=== CONTROLE REMOTO DA CASA ===\n");
 
-        // PASSO 1: Receivers
+        // PASSO 1: Receivers/Subjects
         Lampada lampada = new Lampada("Sala");
         Ventilador ventilador = new Ventilador("Sala");
 
-        // PASSO 2: Invoker + configuracao dos botoes com comandos concretos
+        // PASSO 2: Observadores inscritos nos dois dispositivos
+        AppCelular app = new AppCelular();
+        ContadorEventos contador = new ContadorEventos();
+        lampada.adicionarObservador(app);
+        lampada.adicionarObservador(contador);
+        ventilador.adicionarObservador(app);
+        ventilador.adicionarObservador(contador);
+
+        // PASSO 3: Invoker + configuracao dos botoes com comandos concretos
         ControleRemoto controle = new ControleRemoto(5);
         controle.configurarBotao(0, new ComandoLigarLampada(lampada));
         controle.configurarBotao(1, new ComandoDesligarLampada(lampada));
@@ -49,7 +57,7 @@ public class ControleRemoto {
         controle.configurarBotao(3, new ComandoVelocidadeVentilador(ventilador, 3));
         // botao 4 fica sem comando de proposito
 
-        // PASSO 3: Usar o controle
+        // PASSO 4: Usar o controle
         System.out.println("--- Pressionando botoes ---");
         controle.pressionar(0);
         controle.pressionar(2);
@@ -58,14 +66,21 @@ public class ControleRemoto {
 
         System.out.println("\nEstado: " + lampada + " | " + ventilador);
 
-        // PASSO 4: Desfazer tudo (um a mais do que o necessario)
+        // PASSO 5: Desfazer tudo (um a mais do que o necessario)
         System.out.println("\n--- Desfazendo ---");
         controle.desfazer();
         controle.desfazer();
         controle.desfazer();
         controle.desfazer();
 
+        // PASSO 6: O app deixa de observar a lampada.
+        // O evento acontece, o contador conta, mas o app nao mostra nada.
+        System.out.println("\n--- App desconectado da lampada ---");
+        lampada.removerObservador(app);
+        controle.pressionar(0);
+
         System.out.println("\nEstado final: " + lampada + " | " + ventilador);
+        System.out.println("Eventos contados: " + contador.getTotal());
         System.out.println("\n=== FIM ===");
     }
 }

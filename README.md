@@ -1,10 +1,11 @@
-# Padrão Command
+# Padrões Command + Observer
 
-O **Command** é um padrão de projeto comportamental (GoF). Ele **transforma um pedido em um objeto**.
-Assim, quem pede a ação fica desacoplado de quem a realiza. Com isso é possível enfileirar,
-agendar, registrar e **desfazer** operações.
+Este repositório mostra dois padrões de projeto comportamentais (GoF) trabalhando juntos.
 
-## Participantes
+## Command
+
+O **Command** **transforma um pedido em um objeto**. Assim, quem pede a ação fica desacoplado de
+quem a realiza. Com isso é possível enfileirar, agendar, registrar e **desfazer** operações.
 
 | Papel | Responsabilidade |
 |---|---|
@@ -13,6 +14,30 @@ agendar, registrar e **desfazer** operações.
 | **Receiver** | Tem a lógica de negócio de verdade |
 | **Invoker** | Guarda e dispara os comandos, sem saber o que cada um faz |
 | **Client** | Cria o Receiver e os comandos e os entrega ao Invoker |
+
+## Observer
+
+O **Observer** define uma relação **um-para-muitos**: quando um objeto (o *Subject*) muda de estado,
+todos os objetos inscritos nele (os *Observers*) são avisados automaticamente. O Subject não sabe
+o que cada observador faz com o aviso. Ele só mantém a lista e chama `atualizar()` em cada um.
+
+| Papel | Responsabilidade |
+|---|---|
+| **Subject** | Mantém a lista de observadores e os notifica (`adicionar`, `remover`, `notificar`) |
+| **Observer** | Interface com o método de aviso (`atualizar(evento)`) |
+| **ConcreteObserver** | Decide o que fazer com o aviso (mostrar, registrar, contar...) |
+
+## Como os dois se combinam
+
+O **Receiver** do Command também é o **Subject** do Observer:
+
+```
+Invoker ──executar()──▶ Comando ──▶ Receiver/Subject ──atualizar()──▶ Observadores
+```
+
+O Command cuida de **disparar** as ações. O Observer cuida de **avisar** quem se interessa pelo
+resultado delas. Por isso os Receivers não imprimem nada na tela: quem decide como mostrar ou
+guardar cada evento são os observadores.
 
 ## Estrutura do repositório
 
@@ -27,13 +52,16 @@ agendar, registrar e **desfazer** operações.
 
 ## Exemplo: fila de impressão
 
-| Papel | Classe |
-|---|---|
-| Command | `Command` |
-| ConcreteCommand | `ComandoLigarImpressora`, `ComandoImprimir`, `ComandoDesligarImpressora` |
-| Receiver | `Impressora` |
-| Invoker | `FilaImpressao` |
-| Client | `FilaImpressao.main` |
+| Padrão | Papel | Classe |
+|---|---|---|
+| Command | Command | `Command` |
+| Command | ConcreteCommand | `ComandoLigarImpressora`, `ComandoImprimir`, `ComandoDesligarImpressora` |
+| Command | Receiver | `Impressora` |
+| Command | Invoker | `FilaImpressao` |
+| Observer | Subject | `Impressora` |
+| Observer | Observer | `Observador` |
+| Observer | ConcreteObserver | `PainelImpressora` (mostra na hora), `LogImpressao` (guarda o histórico) |
+| Ambos | Client | `FilaImpressao.main` |
 
 ### Como rodar
 
@@ -47,25 +75,33 @@ java -cp out exemplo.FilaImpressao
 ## Exercício: controle remoto da casa
 
 Um controle remoto tem vários botões. Cada botão recebe um comando, e o controle tem um botão
-**desfazer** que reverte as últimas ações, na ordem inversa.
+**desfazer** que reverte as últimas ações, na ordem inversa. A interface `Comando` agora tem
+**`desfazer()`** além de `executar()`: cada comando precisa saber reverter o que fez.
 
-A diferença em relação ao exemplo é que a interface `Comando` agora tem **`desfazer()`** além de
-`executar()`. Cada comando precisa saber reverter o que fez.
+Os dispositivos da casa (lâmpada e ventilador) são observáveis. Um **app de celular** mostra cada
+evento e um **contador** conta quantos eventos aconteceram. A lógica de gerenciar observadores fica
+numa classe base, `DispositivoObservavel`, que os dois dispositivos herdam.
 
-| Papel | Classe |
-|---|---|
-| Command | `Comando` |
-| ConcreteCommand | `ComandoLigarLampada`, `ComandoDesligarLampada`, `ComandoVelocidadeVentilador` |
-| Receiver | `Lampada`, `Ventilador` |
-| Invoker | `ControleRemoto` |
-| Client | `ControleRemoto.main` (já está pronto, não precisa alterar) |
+| Padrão | Papel | Classe |
+|---|---|---|
+| Command | Command | `Comando` |
+| Command | ConcreteCommand | `ComandoLigarLampada`, `ComandoDesligarLampada`, `ComandoVelocidadeVentilador` |
+| Command | Receiver | `Lampada`, `Ventilador` |
+| Command | Invoker | `ControleRemoto` |
+| Observer | Subject | `DispositivoObservavel` (herdado por `Lampada` e `Ventilador`) |
+| Observer | Observer | `Observador` |
+| Observer | ConcreteObserver | `AppCelular`, `ContadorEventos` |
+| Ambos | Client | `ControleRemoto.main` (já está pronto, não precisa alterar) |
 
 ### O que fazer
 
-1. Complete os Receivers `Lampada` e `Ventilador`.
-2. Complete os três comandos concretos.
+1. **Observer:** complete o `DispositivoObservavel` (lista, adicionar, remover, notificar) e os
+   observadores `AppCelular` e `ContadorEventos`.
+2. **Receivers:** complete `Lampada` e `Ventilador`. Em vez de imprimir na tela, eles devem
+   **notificar os observadores**.
+3. **Command:** complete os três comandos concretos.
    - Atenção ao `ComandoVelocidadeVentilador`: para desfazer, ele precisa **guardar a velocidade anterior** no momento em que executa.
-3. Complete o `ControleRemoto`: configurar botões, pressionar e desfazer usando uma **pilha** de histórico.
+4. **Invoker:** complete o `ControleRemoto`: configurar botões, pressionar e desfazer usando uma **pilha** de histórico.
 
 Todos os pontos a preencher estão marcados com `// TODO`. O código já compila desde o início.
 
@@ -82,23 +118,29 @@ java -cp out exercicio.ControleRemoto
 === CONTROLE REMOTO DA CASA ===
 
 --- Pressionando botoes ---
-Lampada da Sala ligada.
-Ventilador da Sala na velocidade 1.
-Ventilador da Sala na velocidade 3.
+App: Lampada da Sala ligada.
+App: Ventilador da Sala na velocidade 1.
+App: Ventilador da Sala na velocidade 3.
 Botao 4 sem comando.
 
 Estado: Lampada da Sala: LIGADA | Ventilador da Sala: velocidade 3
 
 --- Desfazendo ---
-[desfazer] Ventilador da Sala na velocidade 1.
-[desfazer] Ventilador da Sala na velocidade 0.
-[desfazer] Lampada da Sala desligada.
+[desfazer] App: Ventilador da Sala na velocidade 1.
+[desfazer] App: Ventilador da Sala na velocidade 0.
+[desfazer] App: Lampada da Sala desligada.
 Nada para desfazer.
 
-Estado final: Lampada da Sala: DESLIGADA | Ventilador da Sala: velocidade 0
+--- App desconectado da lampada ---
+
+Estado final: Lampada da Sala: LIGADA | Ventilador da Sala: velocidade 0
+Eventos contados: 7
 
 === FIM ===
 ```
+
+Repare no final: depois que o app é removido da lâmpada, apertar o botão 0 não mostra nada, mas o
+contador continua contando (7 eventos no total). Cada observador é independente.
 
 ### Gabarito
 

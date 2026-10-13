@@ -1,8 +1,9 @@
 package exercicio_resolvido;
 
-// Receiver: uma lampada de um comodo da casa.
+// Receiver (Command) e Subject (Observer): uma lampada de um comodo da casa.
+// Ela nao imprime nada: so avisa os observadores.
 
-public class Lampada {
+public class Lampada extends DispositivoObservavel {
     private final String comodo;
     private boolean ligada;
 
@@ -13,12 +14,12 @@ public class Lampada {
 
     public void ligar() {
         ligada = true;
-        System.out.println("Lampada da " + comodo + " ligada.");
+        notificarObservadores("Lampada da " + comodo + " ligada.");
     }
 
     public void desligar() {
         ligada = false;
-        System.out.println("Lampada da " + comodo + " desligada.");
+        notificarObservadores("Lampada da " + comodo + " desligada.");
     }
 
     @Override

@@ -1,8 +1,9 @@
 package exercicio;
 
-// Receiver: uma lampada de um comodo da casa.
+// Receiver (Command) e Subject (Observer): uma lampada de um comodo da casa.
+// Ela NAO imprime nada na tela: so avisa os observadores.
 
-public class Lampada {
+public class Lampada extends DispositivoObservavel {
     // TODO: campo comodo (String)
     // TODO: campo ligada (boolean)
 
@@ -11,11 +12,13 @@ public class Lampada {
     }
 
     public void ligar() {
-        // TODO: marque como ligada e exiba "Lampada da <comodo> ligada."
+        // TODO: marque como ligada
+        // TODO: notifique os observadores com "Lampada da <comodo> ligada."
     }
 
     public void desligar() {
-        // TODO: marque como desligada e exiba "Lampada da <comodo> desligada."
+        // TODO: marque como desligada
+        // TODO: notifique os observadores com "Lampada da <comodo> desligada."
     }
 
     @Override
