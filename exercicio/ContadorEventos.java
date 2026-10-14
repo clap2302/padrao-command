@@ -3,15 +3,14 @@ package exercicio;
 // Observador concreto: conta quantos eventos aconteceram na casa.
 
 public class ContadorEventos implements Observador {
-    // TODO: campo total (int)
+    private int total;
 
     @Override
     public void atualizar(String evento) {
-        // TODO: incremente o total
+        total++;
     }
 
     public int getTotal() {
-        // TODO
-        return 0;
+        return total;
     }
 }

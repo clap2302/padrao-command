@@ -5,9 +5,6 @@ package exercicio;
 // LEMBRAR qual era a velocidade antes de executar.
 
 public class ComandoVelocidadeVentilador implements Comando {
-    // TODO: campo ventilador
-    // TODO: campo novaVelocidade
-    // TODO: campo velocidadeAnterior
 
     public ComandoVelocidadeVentilador(Ventilador ventilador, int novaVelocidade) {
         // TODO
@@ -15,12 +12,11 @@ public class ComandoVelocidadeVentilador implements Comando {
 
     @Override
     public void executar() {
-        // TODO: guarde a velocidade atual em velocidadeAnterior
-        // TODO: depois mude o ventilador para novaVelocidade
+        // TODO: muda o ventilador para nova velocidade
     }
 
     @Override
     public void desfazer() {
-        // TODO: volte o ventilador para velocidadeAnterior
+        // TODO: volte o ventilador para velocidade anterior
     }
 }

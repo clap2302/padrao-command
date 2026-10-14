@@ -4,26 +4,25 @@ package exercicio;
 // de 0 (desligado) a 3. Ele NAO imprime nada na tela: so avisa os observadores.
 
 public class Ventilador extends DispositivoObservavel {
-    // TODO: campo comodo (String)
-    // TODO: campo velocidade (int), comeca em 0
+    private final String comodo;
+    private int velocidade;
 
     public Ventilador(String comodo) {
-        // TODO
+        this.comodo = comodo;
+        this.velocidade = 0;
     }
 
     public void setVelocidade(int velocidade) {
-        // TODO: altere a velocidade
-        // TODO: notifique os observadores com "Ventilador da <comodo> na velocidade <v>."
+        this.velocidade = velocidade;
+        notificarObservadores("Ventilador da " + comodo + " na velocidade " + velocidade + ".");
     }
 
     public int getVelocidade() {
-        // TODO
-        return 0;
+        return velocidade;
     }
 
     @Override
     public String toString() {
-        // TODO: retorne "Ventilador da <comodo>: velocidade <v>"
-        return "";
+        return "Ventilador da " + comodo + ": velocidade " + velocidade;
     }
 }

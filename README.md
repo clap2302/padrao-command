@@ -95,13 +95,14 @@ numa classe base, `DispositivoObservavel`, que os dois dispositivos herdam.
 
 ### O que fazer
 
-1. **Observer:** complete o `DispositivoObservavel` (lista, adicionar, remover, notificar) e os
-   observadores `AppCelular` e `ContadorEventos`.
-2. **Receivers:** complete `Lampada` e `Ventilador`. Em vez de imprimir na tela, eles devem
-   **notificar os observadores**.
-3. **Command:** complete os três comandos concretos.
+Os dispositivos (`Lampada`, `Ventilador`), os observadores (`AppCelular`, `ContadorEventos`) e o
+`ComandoDesligarLampada` já estão prontos. Leia-os antes de começar: o `ComandoDesligarLampada`
+serve de modelo para os outros comandos.
+
+1. **Observer:** complete o `notificarObservadores` do `DispositivoObservavel`.
+2. **Command:** complete `ComandoLigarLampada` e `ComandoVelocidadeVentilador`.
    - Atenção ao `ComandoVelocidadeVentilador`: para desfazer, ele precisa **guardar a velocidade anterior** no momento em que executa.
-4. **Invoker:** complete o `ControleRemoto`: configurar botões, pressionar e desfazer usando uma **pilha** de histórico.
+3. **Invoker:** complete `pressionar` e `desfazer` no `ControleRemoto`, usando a **pilha** de histórico.
 
 Todos os pontos a preencher estão marcados com `// TODO`. O código já compila desde o início.
 

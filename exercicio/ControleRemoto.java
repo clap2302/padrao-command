@@ -8,15 +8,16 @@ import java.util.Deque;
 // Ele tambem mantem um historico para o botao "desfazer".
 
 public class ControleRemoto {
-    // TODO: campo botoes (Comando[])
-    // TODO: campo historico (Deque<Comando>), use como pilha
+    private final Comando[] botoes;
+    private final Deque<Comando> historico;
 
     public ControleRemoto(int quantidadeBotoes) {
-        // TODO: crie o array de botoes e a pilha de historico
+        this.botoes = new Comando[quantidadeBotoes];
+        this.historico = new ArrayDeque<>();
     }
 
     public void configurarBotao(int botao, Comando comando) {
-        // TODO: associe o comando ao botao
+        botoes[botao] = comando;
     }
 
     public void pressionar(int botao) {

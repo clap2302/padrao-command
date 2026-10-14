@@ -4,26 +4,26 @@ package exercicio;
 // Ela NAO imprime nada na tela: so avisa os observadores.
 
 public class Lampada extends DispositivoObservavel {
-    // TODO: campo comodo (String)
-    // TODO: campo ligada (boolean)
+    private final String comodo;
+    private boolean ligada;
 
     public Lampada(String comodo) {
-        // TODO
+        this.comodo = comodo;
+        this.ligada = false;
     }
 
     public void ligar() {
-        // TODO: marque como ligada
-        // TODO: notifique os observadores com "Lampada da <comodo> ligada."
+        ligada = true;
+        notificarObservadores("Lampada da " + comodo + " ligada.");
     }
 
     public void desligar() {
-        // TODO: marque como desligada
-        // TODO: notifique os observadores com "Lampada da <comodo> desligada."
+        ligada = false;
+        notificarObservadores("Lampada da " + comodo + " desligada.");
     }
 
     @Override
     public String toString() {
-        // TODO: retorne "Lampada da <comodo>: LIGADA" ou "Lampada da <comodo>: DESLIGADA"
-        return "";
+        return "Lampada da " + comodo + ": " + (ligada ? "LIGADA" : "DESLIGADA");
     }
 }

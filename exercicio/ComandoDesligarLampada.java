@@ -3,19 +3,19 @@ package exercicio;
 // Comando concreto: desliga a lampada.
 
 public class ComandoDesligarLampada implements Comando {
-    // TODO: campo lampada
+    private final Lampada lampada;
 
     public ComandoDesligarLampada(Lampada lampada) {
-        // TODO
+        this.lampada = lampada;
     }
 
     @Override
     public void executar() {
-        // TODO: desliga a lampada
+        lampada.desligar();
     }
 
     @Override
     public void desfazer() {
-        // TODO: liga a lampada
+        lampada.ligar();
     }
 }

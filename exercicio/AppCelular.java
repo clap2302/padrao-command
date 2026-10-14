@@ -6,6 +6,6 @@ public class AppCelular implements Observador {
 
     @Override
     public void atualizar(String evento) {
-        // TODO: exiba "App: <evento>"
+        System.out.println("App: " + evento);
     }
 }

@@ -8,14 +8,14 @@ import java.util.List;
 // observadores fica escrita uma vez so.
 
 public abstract class DispositivoObservavel {
-    // TODO: campo observadores (List<Observador>), ja inicializado
+    private final List<Observador> observadores = new ArrayList<>();
 
     public void adicionarObservador(Observador observador) {
-        // TODO
+        observadores.add(observador);
     }
 
     public void removerObservador(Observador observador) {
-        // TODO
+        observadores.remove(observador);
     }
 
     protected void notificarObservadores(String evento) {
