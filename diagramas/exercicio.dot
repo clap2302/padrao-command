@@ -1,0 +1,149 @@
+// Diagrama de classes do exercicio (controle remoto da casa).
+// Para gerar as imagens:
+//   dot -Tsvg diagramas/exercicio.dot -o diagramas/exercicio.svg
+//   dot -Tpng -Gdpi=150 diagramas/exercicio.dot -o diagramas/exercicio.png
+
+digraph Exercicio {
+    rankdir=BT;
+    graph [fontname="Helvetica", fontsize=12, nodesep=0.45, ranksep=0.7, pad=0.3,
+           label=<<b>Exercício: controle remoto da casa (Command + Observer)</b><br/><font point-size="10" color="#b45309">Em laranja: o que você precisa implementar (// TODO)</font>>,
+           labelloc=t];
+    node  [shape=plain, fontname="Helvetica", fontsize=10];
+    edge  [fontname="Helvetica", fontsize=9, color="#444444", labeldistance=2, labelangle=25];
+
+    // ---------------------------------------------------------------- Observer
+    subgraph cluster_observer {
+        label=<<b>Observer</b>>; style="rounded,dashed"; color="#3a8b4f"; fontcolor="#3a8b4f";
+
+        DispositivoObservavel [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e8f3ea">
+  <tr><td><i>«abstract»</i><br/><b><i>DispositivoObservavel</i></b><br/><font point-size="8" color="#3a8b4f">Subject</font></td></tr>
+  <hr/>
+  <tr><td align="left">- observadores: List&lt;Observador&gt;<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ adicionarObservador(o: Observador)<br align="left"/>+ removerObservador(o: Observador)<br align="left"/><font color="#b45309"># notificarObservadores(evento: String)</font><br align="left"/></td></tr>
+</table>>];
+
+        Lampada [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>Lampada</b><br/><font point-size="8" color="#3a8b4f">Receiver + ConcreteSubject</font></td></tr>
+  <hr/>
+  <tr><td align="left">- comodo: String<br align="left"/>- ligada: boolean<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ ligar()<br align="left"/>+ desligar()<br align="left"/>+ toString(): String<br align="left"/></td></tr>
+</table>>];
+
+        Ventilador [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>Ventilador</b><br/><font point-size="8" color="#3a8b4f">Receiver + ConcreteSubject</font></td></tr>
+  <hr/>
+  <tr><td align="left">- comodo: String<br align="left"/>- velocidade: int<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ setVelocidade(velocidade: int)<br align="left"/>+ getVelocidade(): int<br align="left"/>+ toString(): String<br align="left"/></td></tr>
+</table>>];
+
+        Observador [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e8f3ea">
+  <tr><td><i>«interface»</i><br/><b>Observador</b><br/><font point-size="8" color="#3a8b4f">Observer</font></td></tr>
+  <hr/>
+  <tr><td align="left"> </td></tr>
+  <hr/>
+  <tr><td align="left">+ atualizar(evento: String)<br align="left"/></td></tr>
+</table>>];
+
+        AppCelular [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>AppCelular</b><br/><font point-size="8" color="#3a8b4f">ConcreteObserver</font></td></tr>
+  <hr/>
+  <tr><td align="left"> </td></tr>
+  <hr/>
+  <tr><td align="left">+ atualizar(evento: String)<br align="left"/></td></tr>
+</table>>];
+
+        ContadorEventos [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>ContadorEventos</b><br/><font point-size="8" color="#3a8b4f">ConcreteObserver</font></td></tr>
+  <hr/>
+  <tr><td align="left">- total: int<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ atualizar(evento: String)<br align="left"/>+ getTotal(): int<br align="left"/></td></tr>
+</table>>];
+
+    }
+
+    // ---------------------------------------------------------------- Command
+    subgraph cluster_command {
+        label=<<b>Command</b>>; style="rounded,dashed"; color="#1f4e79"; fontcolor="#1f4e79";
+
+        Comando [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e8f0fa">
+  <tr><td><i>«interface»</i><br/><b>Comando</b><br/><font point-size="8" color="#1f4e79">Command</font></td></tr>
+  <hr/>
+  <tr><td align="left"> </td></tr>
+  <hr/>
+  <tr><td align="left">+ executar()<br align="left"/>+ desfazer()<br align="left"/></td></tr>
+</table>>];
+
+        ControleRemoto [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>ControleRemoto</b><br/><font point-size="8" color="#1f4e79">Invoker + Client (main)</font></td></tr>
+  <hr/>
+  <tr><td align="left">- botoes: Comando[]<br align="left"/>- historico: Deque&lt;Comando&gt;<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ ControleRemoto(quantidadeBotoes: int)<br align="left"/>+ configurarBotao(botao: int, comando: Comando)<br align="left"/><font color="#b45309">+ pressionar(botao: int)<br align="left"/>+ desfazer()<br align="left"/></font><u>+ main(args: String[])</u><br align="left"/></td></tr>
+</table>>];
+
+        ComandoVelocidadeVentilador [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff7ed">
+  <tr><td><b>ComandoVelocidadeVentilador</b><br/><font point-size="8" color="#1f4e79">ConcreteCommand</font></td></tr>
+  <hr/>
+  <tr><td align="left"><font color="#b45309">- ventilador: Ventilador<br align="left"/>- novaVelocidade: int<br align="left"/>- velocidadeAnterior: int<br align="left"/></font></td></tr>
+  <hr/>
+  <tr><td align="left"><font color="#b45309">+ executar()<br align="left"/>+ desfazer()<br align="left"/></font></td></tr>
+</table>>];
+
+        ComandoDesligarLampada [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>ComandoDesligarLampada</b><br/><font point-size="8" color="#1f4e79">ConcreteCommand (modelo pronto)</font></td></tr>
+  <hr/>
+  <tr><td align="left">- lampada: Lampada<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ executar()<br align="left"/>+ desfazer()<br align="left"/></td></tr>
+</table>>];
+
+        ComandoLigarLampada [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff7ed">
+  <tr><td><b>ComandoLigarLampada</b><br/><font point-size="8" color="#1f4e79">ConcreteCommand</font></td></tr>
+  <hr/>
+  <tr><td align="left"><font color="#b45309">- lampada: Lampada</font><br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left"><font color="#b45309">+ executar()<br align="left"/>+ desfazer()<br align="left"/></font></td></tr>
+</table>>];
+
+    }
+
+    // ---------------------------------------------------------------- relacoes
+    // Realizacao (implements): tracejada, seta vazada
+    edge [style=dashed, arrowhead=empty];
+    ComandoLigarLampada         -> Comando;
+    ComandoDesligarLampada      -> Comando;
+    ComandoVelocidadeVentilador -> Comando;
+    AppCelular                  -> Observador;
+    ContadorEventos             -> Observador;
+
+    // Heranca (extends): solida, seta vazada
+    edge [style=solid, arrowhead=empty];
+    Lampada    -> DispositivoObservavel;
+    Ventilador -> DispositivoObservavel;
+
+    // Agregacao: o controle guarda comandos; o subject guarda observadores
+    edge [style=solid, arrowhead=vee, arrowtail=odiamond, dir=both];
+    ControleRemoto        -> Comando    [headlabel="0..*", label=" botoes /\n historico"];
+    DispositivoObservavel -> Observador [constraint=false, headlabel="0..*", label=" observadores"];
+
+    // Associacao: cada comando conhece o seu Receiver
+    edge [style=solid, arrowhead=vee, dir=forward, constraint=false];
+    ComandoLigarLampada         -> Lampada    [headlabel="1"];
+    ComandoDesligarLampada      -> Lampada    [headlabel="1"];
+    ComandoVelocidadeVentilador -> Ventilador [headlabel="1"];
+}

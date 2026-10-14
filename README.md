@@ -45,7 +45,8 @@ guardar cada evento são os observadores.
 .
 ├── exemplo/               # Implementação completa: fila de impressão
 ├── exercicio/             # Para resolver: controle remoto com desfazer
-└── exercicio_resolvido/   # Gabarito do exercício (tente antes de olhar!)
+├── exercicio_resolvido/   # Gabarito do exercício (tente antes de olhar!)
+└── diagramas/             # Diagramas UML (fonte .dot + imagens)
 ```
 
 ---
@@ -62,6 +63,12 @@ guardar cada evento são os observadores.
 | Observer | Observer | `Observador` |
 | Observer | ConcreteObserver | `PainelImpressora` (mostra na hora), `LogImpressao` (guarda o histórico) |
 | Ambos | Client | `FilaImpressao.main` |
+
+### Diagrama de classes
+
+![Diagrama UML do exemplo](diagramas/exemplo.svg)
+
+O fonte do diagrama está em [`diagramas/exemplo.dot`](diagramas/exemplo.dot) (Graphviz).
 
 ### Como rodar
 
@@ -92,6 +99,13 @@ numa classe base, `DispositivoObservavel`, que os dois dispositivos herdam.
 | Observer | Observer | `Observador` |
 | Observer | ConcreteObserver | `AppCelular`, `ContadorEventos` |
 | Ambos | Client | `ControleRemoto.main` (já está pronto, não precisa alterar) |
+
+### Diagrama de classes
+
+![Diagrama UML do exercício](diagramas/exercicio.svg)
+
+Em laranja estão os campos e métodos que você precisa implementar. O fonte do diagrama está em
+[`diagramas/exercicio.dot`](diagramas/exercicio.dot) (Graphviz).
 
 ### O que fazer
 

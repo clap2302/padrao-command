@@ -1,0 +1,126 @@
+// Diagrama de classes do exemplo (fila de impressao).
+// Para gerar as imagens:
+//   dot -Tsvg diagramas/exemplo.dot -o diagramas/exemplo.svg
+//   dot -Tpng -Gdpi=150 diagramas/exemplo.dot -o diagramas/exemplo.png
+
+digraph Exemplo {
+    rankdir=BT;
+    graph [fontname="Helvetica", fontsize=12, nodesep=0.45, ranksep=0.7, pad=0.3,
+           label=<<b>Exemplo: fila de impressão (Command + Observer)</b>>,
+           labelloc=t];
+    node  [shape=plain, fontname="Helvetica", fontsize=10];
+    edge  [fontname="Helvetica", fontsize=9, color="#444444", labeldistance=2, labelangle=25];
+
+    // ---------------------------------------------------------------- Observer
+    subgraph cluster_observer {
+        label=<<b>Observer</b>>; style="rounded,dashed"; color="#3a8b4f"; fontcolor="#3a8b4f";
+
+        Observador [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e8f3ea">
+  <tr><td><i>«interface»</i><br/><b>Observador</b><br/><font point-size="8" color="#3a8b4f">Observer</font></td></tr>
+  <hr/>
+  <tr><td align="left"> </td></tr>
+  <hr/>
+  <tr><td align="left">+ atualizar(evento: String)<br align="left"/></td></tr>
+</table>>];
+
+        PainelImpressora [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>PainelImpressora</b><br/><font point-size="8" color="#3a8b4f">ConcreteObserver</font></td></tr>
+  <hr/>
+  <tr><td align="left"> </td></tr>
+  <hr/>
+  <tr><td align="left">+ atualizar(evento: String)<br align="left"/></td></tr>
+</table>>];
+
+        LogImpressao [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>LogImpressao</b><br/><font point-size="8" color="#3a8b4f">ConcreteObserver</font></td></tr>
+  <hr/>
+  <tr><td align="left">- registros: List&lt;String&gt;<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ atualizar(evento: String)<br align="left"/>+ exibir()<br align="left"/></td></tr>
+</table>>];
+    }
+
+    // ------------------------------------------------- Receiver + Subject
+    Impressora [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#f4f0fa">
+  <tr><td><b>Impressora</b><br/><font point-size="8" color="#1f4e79">Receiver</font><font point-size="8"> + </font><font point-size="8" color="#3a8b4f">Subject</font></td></tr>
+  <hr/>
+  <tr><td align="left">- nome: String<br align="left"/>- ligada: boolean<br align="left"/>- numeroImpressoes: int<br align="left"/>- observadores: List&lt;Observador&gt;<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ Impressora(nome: String)<br align="left"/>+ adicionarObservador(o: Observador)<br align="left"/>+ removerObservador(o: Observador)<br align="left"/>- notificarObservadores(evento: String)<br align="left"/>+ ligar()<br align="left"/>+ desligar()<br align="left"/>+ imprimir(documento: String)<br align="left"/>+ toString(): String<br align="left"/></td></tr>
+</table>>];
+
+    // ---------------------------------------------------------------- Command
+    subgraph cluster_command {
+        label=<<b>Command</b>>; style="rounded,dashed"; color="#1f4e79"; fontcolor="#1f4e79";
+
+        Command [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#e8f0fa">
+  <tr><td><i>«interface»</i><br/><b>Command</b><br/><font point-size="8" color="#1f4e79">Command</font></td></tr>
+  <hr/>
+  <tr><td align="left"> </td></tr>
+  <hr/>
+  <tr><td align="left">+ executar()<br align="left"/></td></tr>
+</table>>];
+
+        FilaImpressao [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>FilaImpressao</b><br/><font point-size="8" color="#1f4e79">Invoker + Client (main)</font></td></tr>
+  <hr/>
+  <tr><td align="left">- fila: List&lt;Command&gt;<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ FilaImpressao()<br align="left"/>+ adicionar(comando: Command)<br align="left"/>+ executar()<br align="left"/><u>+ main(args: String[])</u><br align="left"/></td></tr>
+</table>>];
+
+        ComandoLigarImpressora [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>ComandoLigarImpressora</b><br/><font point-size="8" color="#1f4e79">ConcreteCommand</font></td></tr>
+  <hr/>
+  <tr><td align="left">- impressora: Impressora<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ executar()<br align="left"/></td></tr>
+</table>>];
+
+        ComandoImprimir [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>ComandoImprimir</b><br/><font point-size="8" color="#1f4e79">ConcreteCommand</font></td></tr>
+  <hr/>
+  <tr><td align="left">- impressora: Impressora<br align="left"/>- documento: String<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ executar()<br align="left"/></td></tr>
+</table>>];
+
+        ComandoDesligarImpressora [label=<
+<table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="white">
+  <tr><td><b>ComandoDesligarImpressora</b><br/><font point-size="8" color="#1f4e79">ConcreteCommand</font></td></tr>
+  <hr/>
+  <tr><td align="left">- impressora: Impressora<br align="left"/></td></tr>
+  <hr/>
+  <tr><td align="left">+ executar()<br align="left"/></td></tr>
+</table>>];
+
+    }
+
+    // ---------------------------------------------------------------- relacoes
+    // Realizacao (implements): tracejada, seta vazada
+    edge [style=dashed, arrowhead=empty];
+    ComandoLigarImpressora    -> Command;
+    ComandoImprimir           -> Command;
+    ComandoDesligarImpressora -> Command;
+    PainelImpressora          -> Observador;
+    LogImpressao              -> Observador;
+
+    // Agregacao: a fila guarda comandos; a impressora guarda observadores
+    edge [style=solid, arrowhead=vee, arrowtail=odiamond, dir=both];
+    FilaImpressao -> Command    [headlabel="0..*", label=" fila"];
+    Impressora    -> Observador [headlabel="0..*", label=" observadores"];
+
+    // Associacao: cada comando conhece a impressora (Receiver)
+    edge [style=solid, arrowhead=vee, dir=forward, constraint=false];
+    ComandoLigarImpressora    -> Impressora [headlabel="1"];
+    ComandoImprimir           -> Impressora [headlabel="1"];
+    ComandoDesligarImpressora -> Impressora [headlabel="1"];
+}
